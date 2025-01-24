@@ -1,0 +1,16 @@
+[
+  {
+    "first_name": "Molly",
+    "last_name": "Smith",
+    "email": "mollysmith@gmail.com",
+    "username": "mols12",
+    "hashed_password": ""
+  },
+  {
+    "first_name": "Lola",
+    "last_name": "Wilson",
+    "email": "lolawilson@gmail.com",
+    "username": "wilsonl2",
+    "hashed_password": "$2b$10$yaO3ehc6x3.PUJl6mn9iCOan43w7X.KCaFq1Nz9xyYAYzh4i6TGXi"
+  }
+]
