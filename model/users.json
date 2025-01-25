@@ -2,15 +2,16 @@
   {
     "first_name": "Molly",
     "last_name": "Smith",
-    "email": "mollysmith@gmail.com",
+    "email": "mols12@gmail.com",
     "username": "mols12",
-    "hashed_password": ""
+    "hashed_password": "$2b$10$yaO3ehc6x3.PUJl6mn9iCOan43w7X.KCaFq1Nz9xyYAYzh4i6TGXi"
   },
   {
     "first_name": "Lola",
     "last_name": "Wilson",
     "email": "lolawilson@gmail.com",
     "username": "wilsonl2",
-    "hashed_password": "$2b$10$yaO3ehc6x3.PUJl6mn9iCOan43w7X.KCaFq1Nz9xyYAYzh4i6TGXi"
+    "hashed_password": "$2b$10$yaO3ehc6x3.PUJl6mn9iCOan43w7X.KCaFq1Nz9xyYAYzh4i6TGXi",
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IndpbHNvbmwyIiwiaWF0IjoxNzM3ODAzNjgwLCJleHAiOjE3Mzc4OTAwODB9.yfgRZTMDvohhcJo6RquY18WMA598R6sMZcmVFomRrqg"
   }
 ]
