@@ -1,17 +1,1 @@
-[
-  {
-    "first_name": "Molly",
-    "last_name": "Smith",
-    "email": "mols12@gmail.com",
-    "username": "mols12",
-    "hashed_password": "$2b$10$yaO3ehc6x3.PUJl6mn9iCOan43w7X.KCaFq1Nz9xyYAYzh4i6TGXi"
-  },
-  {
-    "first_name": "Lola",
-    "last_name": "Wilson",
-    "email": "lolawilson@gmail.com",
-    "username": "wilsonl2",
-    "hashed_password": "$2b$10$yaO3ehc6x3.PUJl6mn9iCOan43w7X.KCaFq1Nz9xyYAYzh4i6TGXi",
-    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IndpbHNvbmwyIiwiaWF0IjoxNzM3ODAzNjgwLCJleHAiOjE3Mzc4OTAwODB9.yfgRZTMDvohhcJo6RquY18WMA598R6sMZcmVFomRrqg"
-  }
-]
+[{"first_name":"Lola","last_name":"Wilson","email":"lolawilson@gmail.com","username":"wilsonl2","hashed_password":"$2b$10$yaO3ehc6x3.PUJl6mn9iCOan43w7X.KCaFq1Nz9xyYAYzh4i6TGXi","refreshToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IndpbHNvbmwyIiwiaWF0IjoxNzM3ODMzMzc3LCJleHAiOjE3Mzc5MTk3Nzd9.ggf4TAkU6_86yzttVluuxH1LKxbxW1MX5pOHG_Q3cYo"},{"first_name":"Molly","last_name":"Smith","email":"mols12@gmail.com","username":"mols12","hashed_password":"$2b$10$yaO3ehc6x3.PUJl6mn9iCOan43w7X.KCaFq1Nz9xyYAYzh4i6TGXi","refreshToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1vbHMxMiIsImlhdCI6MTczNzg5NzE0MCwiZXhwIjoxNzM3OTgzNTQwfQ.YQtueaU2BodHCCUmPVR_uir2RIiAJcfhuuAOGsgMpmE"}]
