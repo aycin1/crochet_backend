@@ -10,6 +10,8 @@ app.use(cookieParser());
 
 app.use("/register", require("./routes/register"));
 app.use("/login", require("./routes/login"));
+app.use("/patterns", require("./routes/patterns"));
+
 app.use(verifyJWT);
 
 app.use("/home", require("./routes/homepage"));
