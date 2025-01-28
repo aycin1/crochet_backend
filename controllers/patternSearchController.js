@@ -12,7 +12,7 @@ async function axiosCall(options) {
     return result;
   } catch (e) {
     console.log(e);
-    return error;
+    return e;
   }
 }
 
@@ -48,6 +48,24 @@ async function getPatterns(req) {
   return await axiosCall(options);
 }
 
+async function getRandomPatterns() {
+  let arr = [];
+  function getRandomIntegers(max) {
+    for (let i = 0; i < 10; i++) {
+      arr.push(Math.ceil(Math.random() * max));
+    }
+    return arr.join("+");
+  }
+
+  const options = {
+    method: "GET",
+    url: url + `/patterns.json?ids=${getRandomIntegers(1000)}`,
+    headers: headers,
+    auth: auth,
+  };
+  return await axiosCall(options);
+}
+
 //  async function getPatternCategories() {
 //   const options = {
 //     method: "GET",
@@ -64,4 +82,9 @@ async function getPatterns(req) {
 //   }
 // }
 
-module.exports = { getRefineParameters, getSinglePattern, getPatterns };
+module.exports = {
+  getRefineParameters,
+  getSinglePattern,
+  getPatterns,
+  getRandomPatterns,
+};

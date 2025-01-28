@@ -3,6 +3,7 @@ const {
   getRefineParameters,
   getSinglePattern,
   getPatterns,
+  getRandomPatterns,
 } = require("../controllers/patternSearchController");
 const router = express.Router();
 
@@ -16,7 +17,7 @@ router.get("/", async function (req, res) {
   }
 });
 
-router.get("/:id", async function (req, res) {
+router.get("/filter/:id", async function (req, res) {
   try {
     const response = await getSinglePattern(req);
     res.send(response.data.pattern);
@@ -30,6 +31,17 @@ router.get("/refine/:params", async function (req, res) {
   try {
     const response = await getPatterns(req);
     res.send(response.data.patterns);
+  } catch (error) {
+    console.log(error);
+    res.send({ error });
+  }
+});
+
+router.get("/randomiser", async function (req, res) {
+  try {
+    const response = await getRandomPatterns(req);
+    res.send(response.data["patterns"]);
+    //returns object where each key is id and respective value is object of properties
   } catch (error) {
     console.log(error);
     res.send({ error });
