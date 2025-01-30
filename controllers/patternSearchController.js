@@ -1,9 +1,11 @@
 const axios = require("axios");
+require("dotenv").config();
+
 const url = "https://api.ravelry.com";
 const headers = { "Content-Type": "application/json" };
 const auth = {
-  username: "read-7eba33215ade65d107df00cb4c2e7eb5",
-  password: "/XfKCHMShFkU+XhVKuLKzVfP2CvayyP3gIeDfcp5",
+  username: process.env.RAVELRY_USERNAME,
+  password: process.env.RAVELRY_PASSWORD,
 };
 
 async function axiosCall(options) {
