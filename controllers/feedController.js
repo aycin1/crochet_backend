@@ -16,6 +16,10 @@ function getUploadAuth(req, res) {
 }
 
 const data = {
+  lists: require("./../model/lists.json"),
+  setLists: function (data) {
+    this.lists = data;
+  },
   following: require("./../model/following.json"),
   setFollowing: function (data) {
     this.following = data;
@@ -48,16 +52,26 @@ function getPosts(req, res) {
 async function addPost(req, res) {
   const { username, pattern_id, caption } = req.body;
 
-  const doesPostExist = data.posts.find(
+  const findPost = data.posts.find(
     (post) =>
       post.username === username &&
       post.pattern_id === pattern_id &&
       post.caption === caption
   );
-
-  if (doesPostExist)
+  if (findPost)
     return res.status(200).json({
       message: "You have already posted this",
+    });
+
+  const isPatternInCompletedList = data.lists.find(
+    (pattern) =>
+      pattern.pattern_id === pattern_id &&
+      pattern.username === username &&
+      pattern.list === "completed"
+  );
+  if (!isPatternInCompletedList)
+    return res.status(200).json({
+      message: "Pattern must be in your completed list to make a post",
     });
 
   const thisPost = {
@@ -81,9 +95,32 @@ async function addPost(req, res) {
 }
 
 async function deletePost(req, res) {
-  const { post_id } = req.body;
+  const { username, post_id } = req.body;
 
-  // check user sending request is the same as the user on the post
+  const thisPost = data.posts.find(
+    (post) => post.username === username && post.post_id === post_id
+  );
+
+  if (!thisPost)
+    return res
+      .status(400)
+      .json({ message: "Post not found, please try again" });
+
+  const otherPosts = data.posts.filter(
+    (post) =>
+      (post.username !== username && post.post_id !== post_id) ||
+      (post.username !== username && post.post_id === post_id) ||
+      (post.username === username && post.post_id !== post_id)
+  );
+
+  data.setPosts([...otherPosts]);
+
+  await fsPromises.writeFile(
+    path.join(__dirname, "..", "model", "posts.json"),
+    JSON.stringify(data.posts)
+  );
+
+  res.status(200).json({ message: "Post deleted" });
 }
 
 module.exports = { getUploadAuth, getPosts, addPost, deletePost };
