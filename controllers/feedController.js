@@ -94,6 +94,37 @@ async function addPost(req, res) {
   res.status(201).json({ message: "Posted" });
 }
 
+async function editPost(req, res) {
+  const { username, post_id, caption } = req.body;
+
+  const thisPost = data.posts.find(
+    (post) => post.username === username && post.post_id === post_id
+  );
+
+  if (!thisPost)
+    return res
+      .status(400)
+      .json({ message: "Post not found, please try again" });
+
+  thisPost.caption = caption;
+
+  const otherPosts = data.posts.filter(
+    (post) =>
+      (post.username !== username && post.post_id !== post_id) ||
+      (post.username !== username && post.post_id === post_id) ||
+      (post.username === username && post.post_id !== post_id)
+  );
+
+  data.setPosts([...otherPosts, thisPost]);
+
+  await fsPromises.writeFile(
+    path.join(__dirname, "..", "model", "posts.json"),
+    JSON.stringify(data.posts)
+  );
+
+  res.status(200).json({ message: "Post edited" });
+}
+
 async function deletePost(req, res) {
   const { username, post_id } = req.body;
 
@@ -123,4 +154,4 @@ async function deletePost(req, res) {
   res.status(200).json({ message: "Post deleted" });
 }
 
-module.exports = { getUploadAuth, getPosts, addPost, deletePost };
+module.exports = { getUploadAuth, getPosts, addPost, editPost, deletePost };
