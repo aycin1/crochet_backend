@@ -56,7 +56,7 @@ async function handleLogin(req, res) {
       // secure: true,
       maxAge: 24 * 60 * 60 * 1000,
     });
-    res.json({ accessToken });
+    res.status(201).json({ accessToken });
   } else {
     res.status(401).json({ message: "Please try again" });
   }
