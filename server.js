@@ -29,7 +29,7 @@ app.use("/logout", require("./routes/logout"));
 app.use("/patterns", require("./routes/patterns"));
 
 // PUT VERIFY JWT HERE AFTER
-
+app.use(verifyJWT);
 app.use("/comments", require("./routes/comments"));
 app.use("/feed", require("./routes/feed"));
 
@@ -37,5 +37,4 @@ app.use("/users", require("./routes/following"));
 app.use("/home", require("./routes/homepage"));
 app.use("/likes", require("./routes/likes"));
 
-app.use(verifyJWT);
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

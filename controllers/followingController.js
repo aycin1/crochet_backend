@@ -26,7 +26,8 @@ function handleUserSearch(req, res) {
 }
 
 async function handleFollowUser(req, res) {
-  const { username, following_user } = req.body;
+  const { following_user } = req.body;
+  const username = req.user;
 
   const otherFollows = data.following.filter(
     (user) =>
@@ -50,7 +51,8 @@ async function handleFollowUser(req, res) {
 }
 
 async function handleUnfollowUser(req, res) {
-  const { username, unfollowing_user } = req.body;
+  const { unfollowing_user } = req.body;
+  const username = req.user;
 
   const toUnfollow = data.following.find(
     (user) =>

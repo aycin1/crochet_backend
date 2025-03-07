@@ -10,8 +10,7 @@ function listsForCurrentUser(username) {
 }
 
 async function getLists(req, res) {
-  const username = req.params.username;
-
+  const username = req.user;
   const wishlist = data.lists.filter(
     (pattern) =>
       pattern.list === "wishlist" && pattern.username === `${username}`
@@ -27,7 +26,6 @@ async function getLists(req, res) {
     (pattern) =>
       pattern.list === "own_pattern" && pattern.username === `${username}`
   );
-
   return await res.status(201).json({
     wishlist: wishlist,
     wip: wip,
@@ -37,7 +35,8 @@ async function getLists(req, res) {
 }
 
 async function handlePatternAddition(req, res) {
-  const { username, pattern_id, list } = req.body;
+  const { pattern_id, list } = req.body;
+  const username = req.user;
 
   const newPattern = {
     pattern_id: pattern_id,
@@ -51,7 +50,8 @@ async function handlePatternAddition(req, res) {
 }
 
 async function handleListChange(req, res) {
-  const { username, pattern_id, list } = req.body;
+  const { pattern_id, list } = req.body;
+  const username = req.user;
 
   try {
     const currentPattern = data.lists.find((list) => {
@@ -75,7 +75,8 @@ async function handleListChange(req, res) {
 }
 
 async function handlePatternDeletion(req, res) {
-  const { username, pattern_id, list } = req.body;
+  const { pattern_id, list } = req.body;
+  const username = req.user;
 
   const patternsToKeep = data.lists.filter((pattern) => {
     return !(

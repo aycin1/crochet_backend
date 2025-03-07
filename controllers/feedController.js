@@ -39,7 +39,7 @@ function isFollowing(username, post_username) {
 }
 
 function getPosts(req, res) {
-  const username = req.params.username;
+  const username = req.user;
 
   const searchPosts = data.posts.filter(
     (post) =>
@@ -50,7 +50,8 @@ function getPosts(req, res) {
 }
 
 async function addPost(req, res) {
-  const { username, pattern_id, caption } = req.body;
+  const { pattern_id, caption } = req.body;
+  const username = req.user;
 
   const findPost = data.posts.find(
     (post) =>
@@ -95,7 +96,8 @@ async function addPost(req, res) {
 }
 
 async function editPost(req, res) {
-  const { username, post_id, caption } = req.body;
+  const { post_id, caption } = req.body;
+  const username = req.user;
 
   const thisPost = data.posts.find(
     (post) => post.username === username && post.post_id === post_id
@@ -126,7 +128,8 @@ async function editPost(req, res) {
 }
 
 async function deletePost(req, res) {
-  const { username, post_id } = req.body;
+  const { post_id } = req.body;
+  const username = req.user;
 
   const thisPost = data.posts.find(
     (post) => post.username === username && post.post_id === post_id

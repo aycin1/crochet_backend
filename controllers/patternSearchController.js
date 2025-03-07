@@ -51,17 +51,13 @@ async function getPatterns(req) {
 }
 
 async function getRandomPatterns() {
-  let arr = [];
   function getRandomIntegers(max) {
-    for (let i = 0; i < 10; i++) {
-      arr.push(Math.ceil(Math.random() * max));
-    }
-    return arr.join("+");
+    return Math.ceil(Math.random() * max);
   }
 
   const options = {
     method: "GET",
-    url: url + `/patterns.json?ids=${getRandomIntegers(1000)}`,
+    url: url + `/patterns/search.json?ids=${getRandomIntegers(1000)}`,
     headers: headers,
     auth: auth,
   };

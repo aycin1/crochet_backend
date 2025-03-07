@@ -63,7 +63,7 @@ async function handleLogin(req, res) {
 }
 
 function getUser(req, res) {
-  const username = req.params.username;
+  const username = req.user;
   const filter = data.users.filter((user) => user.username === username);
   if (filter.length) return res.status(200).json(filter);
 }
