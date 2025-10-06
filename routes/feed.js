@@ -1,6 +1,5 @@
 const express = require("express");
 const {
-  getUploadAuth,
   getPosts,
   addPost,
   editPost,
@@ -8,7 +7,6 @@ const {
 } = require("../controllers/feedController");
 const router = express.Router();
 
-router.get("/auth", (req, res) => getUploadAuth(req, res));
 router.get("/", (req, res) => getPosts(req, res));
 router.post("/", (req, res) => addPost(req, res));
 router.put("/", (req, res) => editPost(req, res));

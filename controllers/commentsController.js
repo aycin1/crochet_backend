@@ -10,7 +10,7 @@ const data = {
 };
 
 function getComments(req, res) {
-  const post_id = req.params.post_id;
+  const { post_id } = req.params;
 
   const postComments = data.comments.filter(
     (comment) => comment.post_id === post_id
@@ -19,7 +19,8 @@ function getComments(req, res) {
 }
 
 async function addComment(req, res) {
-  const { post_id, comment_username, message } = req.body;
+  const { post_id, message } = req.body;
+  const comment_username = req.user;
 
   const doesCommentExist = data.comments.find(
     (comment) =>
@@ -51,7 +52,8 @@ async function addComment(req, res) {
 }
 
 async function removeComment(req, res) {
-  const { post_id, comment_username, message } = req.body;
+  const { post_id, message } = req.body;
+  const comment_username = req.user;
 
   const doesCommentExist = data.comments.find(
     (comment) =>
@@ -79,9 +81,7 @@ async function removeComment(req, res) {
     JSON.stringify(data.comments)
   );
 
-  return res
-    .status(200)
-    .json({ message: `You have removed the comment on this post` });
+  return res.status(200).json({ message: `Comment has been deleted` });
 }
 
 module.exports = { getComments, addComment, removeComment };

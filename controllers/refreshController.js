@@ -12,12 +12,10 @@ function handleRefreshToken(req, res) {
   const cookies = req.cookies;
   if (!cookies?.jwt) return res.status(401).json({ error: "Unauthorized" });
   const refreshToken = cookies.jwt;
-
   const thisUser = data.users.find(
     (user) => user.refreshToken === refreshToken
   );
   if (!thisUser) return res.status(403).json({ error: "Forbidden" });
-
   jwt.verify(
     refreshToken,
     process.env.REFRESH_TOKEN_SECRET,
@@ -27,7 +25,7 @@ function handleRefreshToken(req, res) {
       const accessToken = jwt.sign(
         { username: decoded.username },
         process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: "10m" }
+        { expiresIn: "5s" }
       );
       res.json({ accessToken });
     }

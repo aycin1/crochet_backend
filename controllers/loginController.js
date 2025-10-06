@@ -21,44 +21,53 @@ async function handleLogin(req, res) {
       .json({ message: "Username and password are required" });
 
   const thisUser = data.users.find((user) => user.username === username);
-  if (!thisUser) return res.status(401).json({ message: "Please try again" });
+  if (!thisUser)
+    return res.status(401).json({
+      message: "No user found, please try again or create an account",
+    });
 
   const compare = await bcrypt.compare(password, thisUser.hashed_password);
 
   if (compare) {
-    const accessToken = jwt.sign(
+    try {
       // create JWTs
-      { username: thisUser.username },
-      process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "10m" }
-    );
-    const refreshToken = jwt.sign(
-      { username: thisUser.username },
-      process.env.REFRESH_TOKEN_SECRET,
-      { expiresIn: "1d" }
-    );
+      const accessToken = jwt.sign(
+        { username: thisUser.username },
+        process.env.ACCESS_TOKEN_SECRET,
+        { expiresIn: "5s" }
+      );
+      const refreshToken = jwt.sign(
+        { username: thisUser.username },
+        process.env.REFRESH_TOKEN_SECRET,
+        { expiresIn: "1d" }
+      );
 
-    const otherUsers = data.users.filter(
-      (user) => user.username !== thisUser.username
-    );
-    const currentUser = { ...thisUser, refreshToken: refreshToken };
-    data.setUsers([...otherUsers, currentUser]);
+      const otherUsers = data.users.filter(
+        (user) => user.username !== thisUser.username
+      );
+      const currentUser = { ...thisUser, refreshToken: refreshToken };
+      data.setUsers([...otherUsers, currentUser]);
 
-    await fsPromises.writeFile(
-      path.join(__dirname, "..", "model", "users.json"),
-      JSON.stringify(data.users)
-    );
+      await fsPromises.writeFile(
+        path.join(__dirname, "..", "model", "users.json"),
+        JSON.stringify(data.users)
+      );
 
-    // send tokens to user
-    res.cookie("jwt", refreshToken, {
-      httpOnly: true,
-      sameSite: "None",
-      // secure: true,
-      maxAge: 24 * 60 * 60 * 1000,
-    });
-    res.status(201).json({ accessToken });
+      // send tokens to user
+      res.cookie("jwt", refreshToken, {
+        httpOnly: true,
+        sameSite: "None",
+        secure: true,
+        maxAge: 24 * 60 * 60 * 1000,
+      });
+
+      res.status(201).json({ accessToken });
+    } catch (error) {
+      console.log("Error processing login:", error);
+      return res.status(500).json({ message: "Server error" });
+    }
   } else {
-    res.status(401).json({ message: "Please try again" });
+    return res.status(401).json({ message: "Please try again" });
   }
 }
 

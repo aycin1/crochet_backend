@@ -1,19 +1,6 @@
 const fsPromises = require("fs").promises;
 const path = require("path");
-const { v4: uuidv4 } = require("uuid");
 require("dotenv").config();
-
-const ImageKit = require("imagekit");
-const imagekit = new ImageKit({
-  publicKey: process.env.PUBLIC_KEY,
-  privateKey: process.env.PRIVATE_KEY,
-  urlEndpoint: process.env.URL_ENDPOINT,
-});
-
-function getUploadAuth(req, res) {
-  const result = imagekit.getAuthenticationParameters();
-  res.send(result);
-}
 
 const data = {
   lists: require("./../model/lists.json"),
@@ -50,42 +37,41 @@ function getPosts(req, res) {
 }
 
 async function addPost(req, res) {
-  const { pattern_id, caption } = req.body;
+  const { pattern_id, caption, uuid } = req.body;
   const username = req.user;
 
-  const findPost = data.posts.find(
-    (post) =>
-      post.username === username &&
-      post.pattern_id === pattern_id &&
-      post.caption === caption
-  );
-  if (findPost)
-    return res.status(200).json({
-      message: "You have already posted this",
-    });
+  // const findPost = data.posts.find(
+  //   (post) =>
+  //     post.username === username &&
+  //     post.pattern_id === pattern_id &&
+  //     post.caption === caption
+  // );
+  // if (findPost)
+  //   return res.status(200).json({
+  //     message: "You have already posted this",
+  //     findPost,
+  //   });
 
-  const isPatternInCompletedList = data.lists.find(
-    (pattern) =>
-      pattern.pattern_id === pattern_id &&
-      pattern.username === username &&
-      pattern.list === "completed"
-  );
-  if (!isPatternInCompletedList)
-    return res.status(200).json({
-      message: "Pattern must be in your completed list to make a post",
-    });
+  // const isPatternInCompletedList = data.lists.find(
+  //   (pattern) =>
+  //     pattern.pattern_id === pattern_id &&
+  //     pattern.username === username &&
+  //     pattern.list === "completed"
+  // );
+  // if (!isPatternInCompletedList)
+  //   return res.status(200).json({
+  //     message: "Pattern must be in your completed list to make a post",
+  //   });
 
   const thisPost = {
     username: username,
     pattern_id: pattern_id,
-    post_id: uuidv4(),
+    post_id: uuid,
     timestamp: Date.now(),
     caption: caption,
   };
 
-  thisPost.img_url = process.env.urlEndpoint + "/" + thisPost.post_id;
-
-  data.setPosts([...data.posts, thisPost]);
+  data.setPosts([thisPost, ...data.posts]);
 
   await fsPromises.writeFile(
     path.join(__dirname, "..", "model", "posts.json"),
@@ -117,7 +103,7 @@ async function editPost(req, res) {
       (post.username === username && post.post_id !== post_id)
   );
 
-  data.setPosts([...otherPosts, thisPost]);
+  data.setPosts([thisPost, ...otherPosts]);
 
   await fsPromises.writeFile(
     path.join(__dirname, "..", "model", "posts.json"),
@@ -157,4 +143,4 @@ async function deletePost(req, res) {
   res.status(200).json({ message: "Post deleted" });
 }
 
-module.exports = { getUploadAuth, getPosts, addPost, editPost, deletePost };
+module.exports = { getPosts, addPost, editPost, deletePost };

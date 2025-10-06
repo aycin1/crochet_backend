@@ -3,14 +3,16 @@ const {
   getRefineParameters,
   getSinglePattern,
   getPatterns,
-  getRandomPatterns,
+  getPatternCategories,
+  getPatternAttributes,
 } = require("../controllers/patternSearchController");
 const router = express.Router();
 
 router.get("/", async function (req, res) {
   try {
     const response = await getRefineParameters(req);
-    res.send(response.data.pattern);
+
+    res.send(response);
   } catch (error) {
     console.log(error);
     res.send({ error });
@@ -27,35 +29,33 @@ router.get("/filter/:id", async function (req, res) {
   }
 });
 
-router.get("/refine/:params", async function (req, res) {
+router.get("/refine", async function (req, res) {
   try {
     const response = await getPatterns(req);
-    res.send(response.data.patterns);
+    res.send(response?.data?.patterns);
   } catch (error) {
     console.log(error);
     res.send({ error });
   }
 });
 
-router.get("/randomiser", async function (req, res) {
+router.get("/categories", async function (req, res) {
   try {
-    const response = await getRandomPatterns(req);
-    res.send(response.data.patterns);
-    //returns object where each key is id and respective value is object of properties
+    const response = await getPatternCategories(req);
+    res.send(response.data.pattern_categories.children);
   } catch (error) {
     console.log(error);
-    res.send(error);
+    res.send({ error });
   }
 });
 
-// router.get("/", async function (req, res) {
-//   try {
-//     const response = await getPatternCategories(req);
-//     res.send(response.data.pattern_categories.children);
-//   } catch (error) {
-//     console.log(error);
-//     res.send({ error });
-//   }
-// });
+router.get("/attributes", async function (req, res) {
+  try {
+    const response = await getPatternAttributes(req);
+    res.send(response.data.attribute_groups);
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 module.exports = router;
