@@ -1,23 +1,11 @@
 const express = require("express");
 const {
-  getRefineParameters,
   getSinglePattern,
   getPatterns,
   getPatternCategories,
   getPatternAttributes,
 } = require("../controllers/patternSearchController");
 const router = express.Router();
-
-router.get("/", async function (req, res) {
-  try {
-    const response = await getRefineParameters(req);
-
-    res.send(response);
-  } catch (error) {
-    console.log(error);
-    res.send({ error });
-  }
-});
 
 router.get("/filter/:id", async function (req, res) {
   try {

@@ -18,28 +18,6 @@ async function axiosCall(options) {
   }
 }
 
-async function getRefineParameters() {
-  const options = {
-    method: "GET",
-    url: url + `/603.json`,
-    headers: headers,
-    auth: auth,
-  };
-  const response = (await axiosCall(options)).data.pattern;
-  console.log(response);
-  return {
-    free: response.free,
-    craft: response.craft,
-    yardage: response.yardage,
-    yardage_max: response.yardage_max,
-    price: response.price,
-    currency: response.currency,
-    downloadable: response.downloadable,
-    download_location: response.download_location,
-    yarn_weight: response.yarn_weight,
-  };
-}
-
 async function getSinglePattern(req) {
   const { id } = req.params;
 
@@ -94,10 +72,8 @@ async function getPatternAttributes() {
 }
 
 module.exports = {
-  getRefineParameters,
   getSinglePattern,
   getPatterns,
-
   getPatternCategories,
   getPatternAttributes,
 };
