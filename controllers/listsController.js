@@ -34,12 +34,12 @@ async function getLists(req, res) {
 }
 
 async function getListForPattern(req, res) {
-  const { patternID } = req.params;
+  const { pattern_id } = req.query;
   const username = req.user;
 
   const listForPattern = data.lists.find(
     (list) =>
-      parseInt(list.pattern_id) === parseInt(patternID) &&
+      parseInt(list.pattern_id) === parseInt(pattern_id) &&
       list.username === username
   );
   return await res.status(201).json({ listForPattern });

@@ -116,7 +116,7 @@ async function editPost(req, res) {
 async function deletePost(req, res) {
   const { post_id } = req.body;
   const username = req.user;
-
+  console.log(post_id);
   const thisPost = data.posts.find(
     (post) => post.username === username && post.post_id === post_id
   );

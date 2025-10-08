@@ -33,6 +33,7 @@ app.use(verifyJWT);
 
 app.use("/feed", require("./routes/feed"));
 app.use("/users", require("./routes/users"));
+app.use("/follows", require("./routes/follows"));
 app.use("/lists", require("./routes/lists"));
 app.use("/likes", require("./routes/likes"));
 app.use("/comments", require("./routes/comments"));
