@@ -88,14 +88,14 @@ async function handleUnfollowUser(req, res) {
 async function getFollowCount(req, res) {
   const currentUser = req.user;
 
-  const followers = data.following.filter(
-    (follow) => follow.following_user === currentUser
-  );
-  const following = data.following.filter(
-    (follow) => follow.username === currentUser
-  );
+  const followers = data.following
+    .filter((follow) => follow.following_user === currentUser)
+    ?.map((obj) => obj.username);
+  const following = data.following
+    .filter((follow) => follow.username === currentUser)
+    ?.map((obj) => obj.following_user);
 
-  return res.status(200).json({ followers, following });
+  return res.status(200).json([{ followers }, { following }]);
 }
 
 module.exports = {

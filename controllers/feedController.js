@@ -33,7 +33,7 @@ function getPosts(req, res) {
       isFollowing(username, post.username) === true ||
       username === post.username
   );
-  return res.status(200).json({ searchPosts });
+  return res.status(200).json({ posts });
 }
 
 async function addPost(req, res) {
