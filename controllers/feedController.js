@@ -28,7 +28,7 @@ function isFollowing(username, post_username) {
 function getPosts(req, res) {
   const username = req.user;
 
-  const searchPosts = data.posts.filter(
+  const posts = data.posts.filter(
     (post) =>
       isFollowing(username, post.username) === true ||
       username === post.username
