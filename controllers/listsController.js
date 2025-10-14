@@ -27,22 +27,10 @@ async function getLists(req, res) {
   // );
   return await res.status(201).json({
     wishlist: wishlist,
-    "in-progress": inProgress,
+    wip: inProgress,
     completed: completed,
     // ownPatterns: ownPatterns,
   });
-}
-
-async function getListForPattern(req, res) {
-  const { pattern_id } = req.query;
-  const username = req.user;
-
-  const listForPattern = data.lists.find(
-    (list) =>
-      parseInt(list.pattern_id) === parseInt(pattern_id) &&
-      list.username === username
-  );
-  return await res.status(201).json({ listForPattern });
 }
 
 async function handlePatternAddition(req, res) {
@@ -127,7 +115,6 @@ async function handlePatternDeletion(req, res) {
 
 module.exports = {
   getLists,
-  getListForPattern,
   handlePatternAddition,
   handleListChange,
   handlePatternDeletion,
