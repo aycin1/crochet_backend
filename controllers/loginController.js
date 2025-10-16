@@ -34,7 +34,7 @@ async function handleLogin(req, res) {
       const accessToken = jwt.sign(
         { username: thisUser.username },
         process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: "5s" }
+        { expiresIn: "15m" }
       );
       const refreshToken = jwt.sign(
         { username: thisUser.username },
@@ -71,10 +71,4 @@ async function handleLogin(req, res) {
   }
 }
 
-function getUser(req, res) {
-  const username = req.user;
-  const filter = data.users.filter((user) => user.username === username);
-  if (filter.length) return res.status(200).json(filter);
-}
-
-module.exports = { handleLogin, getUser };
+module.exports = { handleLogin };

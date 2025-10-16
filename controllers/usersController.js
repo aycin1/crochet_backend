@@ -13,6 +13,13 @@ const data = {
   },
 };
 
+function getUser(req, res) {
+  const username = req.user;
+  const thisUser = data.users.find((user) => user.username === username);
+  if (thisUser) return res.status(200).json(thisUser.username);
+  else return res.sendStatus(404);
+}
+
 function getUserPosts(req, res) {
   const { username } = req.query;
   const posts = data.posts.filter((post) => post.username === username);
@@ -30,7 +37,4 @@ function handleUserSearch(req, res) {
   return res.status(200).json({ username });
 }
 
-module.exports = {
-  handleUserSearch,
-  getUserPosts,
-};
+module.exports = { getUser, getUserPosts, handleUserSearch };
