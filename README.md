@@ -13,7 +13,7 @@ The backend is built with **Node** and **Express**, structured around a RESTful 
 
 User authentication is achieved with **JSON web tokens**, which are issued by the server on login and are verified for protected routes.
 
-Image uploading is handled by **ImageKit**. After a user uploads an image, the server sends them to ImageKit, stores the URL in the database, and provides that URL to the frontend for rendering.
+Image uploading is handled by **ImageKit**. After a user uploads an image on the frontend, the server sends them to ImageKit, stores the URL in the database, and provides that URL to the frontend for rendering.
 
 The backend also communicates with the [Ravelry API](https://www.ravelry.com/api) for fetching pattern data.
 
@@ -41,6 +41,8 @@ The server is connected to a **PostgreSQL** database that stores users, lists, p
 
 # Acknowledgements
 
-[Ravelry]()
-[Dave Grey]()
-[ImageKit]()
+[Ravelry](https://www.ravelry.com/api)
+
+[Dave Gray](https://github.com/gitdagray)
+
+[ImageKit](https://imagekit.io/)
