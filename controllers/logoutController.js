@@ -1,23 +1,17 @@
-const fsPromises = require("fs").promises;
-const path = require("path");
-
-const data = {
-  users: require("../model/users.json"),
-  setUsers: function (data) {
-    this.users = data;
-  },
-};
+const db = require("../db/index.js");
 
 async function handleLogout(req, res) {
-  // accessToken to be deleted on client-side.
   const cookies = req.cookies;
+
   if (!cookies?.jwt) return res.sendStatus(204);
   const refreshToken = cookies.jwt;
 
-  const thisUser = data.users.find(
-    (user) => user.refreshToken === refreshToken
+  const thisUser = await db.query(
+    "SELECT * FROM users WHERE refresh_token = $1",
+    [refreshToken]
   );
-  if (!thisUser) {
+
+  if (!thisUser.rows.length) {
     res.clearCookie("jwt", {
       httpOnly: true,
       sameSite: "None",
@@ -26,14 +20,9 @@ async function handleLogout(req, res) {
     return res.sendStatus(204);
   }
 
-  const otherUsers = data.users.filter(
-    (user) => user.refreshToken !== thisUser.refreshToken
-  );
-  const currentUser = { ...thisUser, refreshToken: "" };
-  data.setUsers([...otherUsers, currentUser]);
-  await fsPromises.writeFile(
-    path.join(__dirname, "..", "model", "users.json"),
-    JSON.stringify(data.users)
+  await db.query(
+    "UPDATE users SET refresh_token = $1 WHERE refresh_token = $2",
+    ["", refreshToken]
   );
 
   res.clearCookie("jwt", {

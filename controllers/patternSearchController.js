@@ -2,7 +2,7 @@ const axios = require("axios");
 const { response } = require("express");
 require("dotenv").config();
 
-const url = "https://api.ravelry.com/patterns";
+const url = "https://api.ravelry.com/";
 const headers = { "Content-Type": "application/json" };
 const auth = {
   username: process.env.RAVELRY_USERNAME,
@@ -23,7 +23,7 @@ async function getSinglePattern(req) {
 
   const options = {
     method: "GET",
-    url: url + `/${id}.json`,
+    url: `${url}/patterns/${id}.json`,
     headers: headers,
     auth: auth,
   };
@@ -33,28 +33,26 @@ async function getSinglePattern(req) {
 async function getPatterns(req) {
   const queries = req.query;
 
-  const options = {
-    method: "GET",
-    headers: headers,
-    auth: auth,
-  };
-
   const keys = Object?.keys(queries)?.map((query) => query);
   const queryArr = Object?.values(queries)?.map(
     (query, index) => `${keys[index]}=${query}`
   );
 
-  options.url = queryArr.length
-    ? `${url}/search.json?${queryArr.join("&")}`
-    : `${url}/search.json`;
-
+  const options = {
+    method: "GET",
+    headers: headers,
+    auth: auth,
+    url: queryArr.length
+      ? `${url}/patterns/search.json?${queryArr.join("&")}`
+      : `${url}/patterns/search.json`,
+  };
   return await axiosCall(options);
 }
 
 async function getPatternCategories() {
   const options = {
     method: "GET",
-    url: "https://api.ravelry.com/pattern_categories/list.json",
+    url: `${url}/pattern_categories/list.json`,
     headers: headers,
     auth: auth,
   };
@@ -64,7 +62,7 @@ async function getPatternCategories() {
 async function getPatternAttributes() {
   const options = {
     method: "GET",
-    url: "https://api.ravelry.com/pattern_attributes/groups.json",
+    url: `${url}/pattern_attributes/groups.json`,
     headers: headers,
     auth: auth,
   };

@@ -63,7 +63,7 @@ async function removeComment(req, res) {
   );
 
   if (!doesCommentExist)
-    return res.status(200).json({ message: "Comment could not be found" });
+    return res.status(404).json({ message: "Comment could not be found" });
 
   const otherComments = data.comments.filter(
     (comment) =>

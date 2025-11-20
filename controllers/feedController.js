@@ -81,7 +81,7 @@ async function addPost(req, res) {
   res.status(201).json({ message: "Posted" });
 }
 
-async function editPost(req, res) {
+async function editCaption(req, res) {
   const { post_id, caption } = req.body;
   const username = req.user;
 
@@ -143,4 +143,4 @@ async function deletePost(req, res) {
   res.status(200).json({ message: "Post deleted" });
 }
 
-module.exports = { getPosts, addPost, editPost, deletePost };
+module.exports = { getPosts, addPost, editCaption, deletePost };

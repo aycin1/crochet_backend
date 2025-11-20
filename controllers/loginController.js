@@ -1,16 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-
-const fsPromises = require("fs").promises;
-const path = require("path");
-
-const data = {
-  users: require("./../model/users.json"),
-  setUsers: function (data) {
-    this.users = data;
-  },
-};
+const db = require("../db/index.js");
 
 async function handleLogin(req, res) {
   const { username, password } = req.body;
@@ -20,37 +11,34 @@ async function handleLogin(req, res) {
       .status(400)
       .json({ message: "Username and password are required" });
 
-  const thisUser = data.users.find((user) => user.username === username);
-  if (!thisUser)
+  const thisUser = await db.query("SELECT * FROM users WHERE username = $1", [
+    username,
+  ]);
+
+  if (!thisUser.rows.length)
     return res.status(401).json({
       message: "No user found, please try again or create an account",
     });
 
-  const compare = await bcrypt.compare(password, thisUser.hashed_password);
+  const compare = await bcrypt.compare(password, thisUser.rows[0].password);
 
   if (compare) {
     try {
       // create JWTs
       const accessToken = jwt.sign(
-        { username: thisUser.username },
+        { username: username },
         process.env.ACCESS_TOKEN_SECRET,
         { expiresIn: "15m" }
       );
       const refreshToken = jwt.sign(
-        { username: thisUser.username },
+        { username: username },
         process.env.REFRESH_TOKEN_SECRET,
         { expiresIn: "1d" }
       );
 
-      const otherUsers = data.users.filter(
-        (user) => user.username !== thisUser.username
-      );
-      const currentUser = { ...thisUser, refreshToken: refreshToken };
-      data.setUsers([...otherUsers, currentUser]);
-
-      await fsPromises.writeFile(
-        path.join(__dirname, "..", "model", "users.json"),
-        JSON.stringify(data.users)
+      await db.query(
+        "UPDATE users SET refresh_token = $1 WHERE username = $2",
+        [refreshToken, username]
       );
 
       // send tokens to user
