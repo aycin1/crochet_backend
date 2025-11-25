@@ -6,12 +6,17 @@ async function handleLogout(req, res) {
   if (!cookies?.jwt) return res.sendStatus(204);
   const refreshToken = cookies.jwt;
 
-  const thisUser = await db.query(
-    "SELECT * FROM users WHERE refresh_token = $1",
-    [refreshToken]
-  );
+  let thisUser;
 
-  if (!thisUser.rows.length) {
+  try {
+    thisUser = await db.query("SELECT * FROM users WHERE refresh_token = $1", [
+      refreshToken,
+    ]);
+  } catch (error) {
+    console.log(error);
+  }
+
+  if (!thisUser?.rows?.length) {
     res.clearCookie("jwt", {
       httpOnly: true,
       sameSite: "None",
@@ -20,10 +25,14 @@ async function handleLogout(req, res) {
     return res.sendStatus(204);
   }
 
-  await db.query(
-    "UPDATE users SET refresh_token = $1 WHERE refresh_token = $2",
-    ["", refreshToken]
-  );
+  try {
+    await db.query(
+      "UPDATE users SET refresh_token = $1 WHERE refresh_token = $2",
+      ["", refreshToken]
+    );
+  } catch (error) {
+    console.log(error);
+  }
 
   res.clearCookie("jwt", {
     httpOnly: true,

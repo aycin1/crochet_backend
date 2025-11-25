@@ -5,13 +5,14 @@ This is the API for the Fibre Fantasies website.
 ### Link
 
 [Frontend source code](https://github.com/aycin1/hooks)
+
 [Deployed website]()
 
 ## How it's made
 
 The backend is built with **Node** and **Express**, structured around a RESTful API that handles all data flow between the client and database.
 
-User authentication is achieved with **JSON web tokens**, which are issued by the server on login and are verified for protected routes.
+User authentication is achieved with **JSON web tokens**, which are issued by the server on user login and are verified via custom middleware for protected routes.
 
 Image uploading is handled by **ImageKit**. After a user uploads an image on the frontend, the server sends them to ImageKit, stores the URL in the database, and provides that URL to the frontend for rendering.
 
@@ -41,8 +42,8 @@ The server is connected to a **PostgreSQL** database that stores users, lists, p
 
 # Acknowledgements
 
-[Ravelry](https://www.ravelry.com/api)
+- [Ravelry](https://www.ravelry.com/api)
 
-[Dave Gray](https://github.com/gitdagray)
+- [Dave Gray](https://github.com/gitdagray)
 
-[ImageKit](https://imagekit.io/)
+- [ImageKit](https://imagekit.io/)

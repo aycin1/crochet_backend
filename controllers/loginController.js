@@ -1,6 +1,5 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-require("dotenv").config();
 const db = require("../db/index.js");
 
 async function handleLogin(req, res) {
@@ -11,11 +10,16 @@ async function handleLogin(req, res) {
       .status(400)
       .json({ message: "Username and password are required" });
 
-  const thisUser = await db.query("SELECT * FROM users WHERE username = $1", [
-    username,
-  ]);
+  let thisUser;
+  try {
+    thisUser = await db.query("SELECT * FROM users WHERE username = $1", [
+      username,
+    ]);
+  } catch (error) {
+    console.log(error);
+  }
 
-  if (!thisUser.rows.length)
+  if (!thisUser?.rows?.length)
     return res.status(401).json({
       message: "No user found, please try again or create an account",
     });

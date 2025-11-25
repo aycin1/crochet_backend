@@ -1,6 +1,5 @@
 const axios = require("axios");
 const { response } = require("express");
-require("dotenv").config();
 
 const url = "https://api.ravelry.com/";
 const headers = { "Content-Type": "application/json" };

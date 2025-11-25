@@ -1,5 +1,4 @@
 const express = require("express");
-require("dotenv").config();
 const ImageKit = require("imagekit");
 
 const imagekit = new ImageKit({

@@ -1,54 +1,46 @@
-const fsPromises = require("fs").promises;
-const path = require("path");
-const data = {
-  lists: require("../model/lists.json"),
-  setLists: function (data) {
-    this.lists = data;
-  },
-};
+const db = require("../db/index.js");
 
 async function getLists(req, res) {
   const username = req.user;
 
-  const wishlist = data.lists.filter(
-    (pattern) =>
-      pattern.list === "wishlist" && pattern.username === `${username}`
-  );
-  const inProgress = data.lists.filter(
-    (pattern) => pattern.list === "wip" && pattern.username === `${username}`
-  );
-  const completed = data.lists.filter(
-    (pattern) =>
-      pattern.list === "completed" && pattern.username === `${username}`
-  );
-  // const ownPatterns = data.lists.filter(
-  //   (pattern) =>
-  //     pattern.list === "own_pattern" && pattern.username === `${username}`
-  // );
-  return await res.status(201).json({
-    wishlist: wishlist,
-    wip: inProgress,
-    completed: completed,
-    // ownPatterns: ownPatterns,
+  let listsQuery;
+  let patternQuery;
+
+  try {
+    listsQuery = await db.query(
+      "SELECT l.name FROM lists l JOIN users u ON l.user_id=u.user_id WHERE u.username = $1;",
+      [username]
+    );
+    patternQuery = await db.query(
+      "SELECT p.pattern_id, l.name FROM patterns p JOIN lists l ON p.list_id = l.list_id JOIN users u ON p.user_id = u.user_id WHERE u.username=$1;",
+      [username]
+    );
+  } catch (error) {
+    console.log(error);
+  }
+
+  const lists = listsQuery.rows.map((list) => {
+    const patterns = patternQuery.rows.filter((row) => row.name === list.name);
+    return { name: list.name, patterns };
   });
+
+  return await res.status(201).json(lists);
 }
 
 async function handlePatternAddition(req, res) {
   const { pattern_id, list } = req.body;
   const username = req.user;
 
-  const newPattern = {
-    pattern_id: parseInt(pattern_id),
-    username: username,
-    list: list,
-  };
+  let addPattern;
 
-  data.setLists([...data.lists, newPattern]);
-
-  await fsPromises.writeFile(
-    path.join(__dirname, "..", "model", "lists.json"),
-    JSON.stringify(data.lists)
-  );
+  try {
+    addPattern = await db.query(
+      "INSERT INTO patterns (pattern_id, user_id, list_id) SELECT $1, u.user_id, l.list_id FROM lists l LEFT JOIN users u ON u.user_id = l.user_id WHERE l.name = $2 AND u.username = $3;",
+      [pattern_id, list, username]
+    );
+  } catch (error) {
+    console.log(error);
+  }
 
   return await res
     .status(201)
@@ -59,54 +51,34 @@ async function handleListChange(req, res) {
   const { pattern_id, list } = req.body;
   const username = req.user;
 
+  let changeList;
+
   try {
-    const currentPattern = data.lists.find((list) => {
-      return (
-        list.username === username &&
-        parseInt(list.pattern_id) === parseInt(pattern_id)
-      );
-    });
-
-    const notPattern = data.lists.filter(
-      (list) =>
-        (list.username !== currentPattern.username &&
-          parseInt(list.pattern_id) !== parseInt(currentPattern.pattern_id)) ||
-        (list.username === currentPattern.username &&
-          parseInt(list.pattern_id) !== parseInt(currentPattern.pattern_id))
+    changeList = await db.query(
+      "UPDATE patterns SET list_id = lists.list_id FROM lists, users WHERE patterns.pattern_id = $1 AND users.username = $2 AND lists.name = $3;",
+      [pattern_id, username, list]
     );
-    const currentUpdate = { ...currentPattern, list: list };
-    data.setLists([...notPattern, currentUpdate]);
-
-    await fsPromises.writeFile(
-      path.join(__dirname, "..", "model", "lists.json"),
-      JSON.stringify(data.lists)
-    );
-
-    return await res
-      .status(201)
-      .json({ message: `Pattern has been moved to your ${list}` });
   } catch (error) {
     console.log(error);
   }
+
+  return await res
+    .status(201)
+    .json({ message: `Pattern has been moved to your ${list}` });
 }
 
 async function handlePatternDeletion(req, res) {
   const { pattern_id } = req.body;
   const username = req.user;
 
-  const patternsToKeep = data.lists.filter((pattern) => {
-    return !(
-      pattern.username === username &&
-      parseInt(pattern.pattern_id) === parseInt(pattern_id)
+  try {
+    await db.query(
+      "DELETE FROM patterns USING users WHERE patterns.user_id = users.user_id AND patterns.pattern_id = $1 AND users.username = $2;",
+      [pattern_id, username]
     );
-  });
-
-  data.setLists(patternsToKeep);
-
-  await fsPromises.writeFile(
-    path.join(__dirname, "..", "model", "lists.json"),
-    JSON.stringify(data.lists)
-  );
+  } catch (error) {
+    console.log(error);
+  }
 
   return await res
     .status(201)

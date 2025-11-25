@@ -1,85 +1,61 @@
-const fsPromises = require("fs").promises;
-const path = require("path");
-require("dotenv").config();
+const db = require("../db/index.js");
 
-const data = {
-  comments: require("./../model/comments.json"),
-  setComments: function (data) {
-    this.comments = data;
-  },
-};
-
-function getComments(req, res) {
+async function getComments(req, res) {
   const { post_id } = req.params;
 
-  const postComments = data.comments.filter(
-    (comment) => comment.post_id === post_id
-  );
-  return res.status(200).json(postComments);
+  let comments;
+
+  try {
+    comments = await db.query(
+      "SELECT c.*, u.username FROM comments c JOIN users u ON c.user_id = u.user_id WHERE post_id = $1",
+      [post_id]
+    );
+  } catch (error) {
+    console.log(error);
+  }
+
+  return res.status(200).json(comments.rows);
 }
 
 async function addComment(req, res) {
   const { post_id, message } = req.body;
-  const comment_username = req.user;
+  const username = req.user;
 
-  const doesCommentExist = data.comments.find(
-    (comment) =>
-      comment.post_id === post_id &&
-      comment.comment_username === comment_username &&
-      comment.message == message
-  );
+  let doesCommentExist;
 
-  if (doesCommentExist)
-    return res.status(200).json({ message: "Comment has already been posted" });
+  try {
+    doesCommentExist = await db.query(
+      "SELECT * FROM comments WHERE post_id = $1 AND comment = $2 AND user_id = (SELECT user_id FROM users WHERE username = $3);",
+      [post_id, message, username]
+    );
+    if (doesCommentExist.rows.length)
+      return res
+        .status(200)
+        .json({ message: "Comment has already been posted" });
 
-  const thisComment = {
-    post_id: post_id,
-    comment_username: comment_username,
-    message: message,
-    timestamp: Date.now(),
-  };
-
-  const otherComments = data.comments;
-
-  data.setComments([...otherComments, thisComment]);
-
-  await fsPromises.writeFile(
-    path.join(__dirname, "..", "model", "comments.json"),
-    JSON.stringify(data.comments)
-  );
+    await db.query(
+      "INSERT INTO comments (user_id, comment, time, post_id) VALUES ((SELECT user_id FROM users WHERE username = $1), $2, NOW(), $3);",
+      [username, message, post_id]
+    );
+  } catch (error) {
+    console.log(error);
+  }
 
   return res.status(200).json({ message: `You have commented on this post` });
 }
 
 async function removeComment(req, res) {
-  const { post_id, message } = req.body;
-  const comment_username = req.user;
+  const { post_id, comment } = req.body;
+  const username = req.user;
 
-  const doesCommentExist = data.comments.find(
-    (comment) =>
-      comment.post_id === post_id &&
-      comment.comment_username === comment_username &&
-      comment.message == message
-  );
-
-  if (!doesCommentExist)
-    return res.status(404).json({ message: "Comment could not be found" });
-
-  const otherComments = data.comments.filter(
-    (comment) =>
-      !(
-        comment.post_id === post_id &&
-        comment.comment_username === comment_username &&
-        comment.message == message
-      )
-  );
-
-  data.setComments([...otherComments]);
-
-  await fsPromises.writeFile(
-    path.join(__dirname, "..", "model", "comments.json"),
-    JSON.stringify(data.comments)
-  );
+  try {
+    await db.query(
+      "DELETE FROM comments WHERE post_id = $1 AND comment = $2 AND user_id = (SELECT user_id FROM users WHERE username = $3);",
+      [post_id, comment, username]
+    );
+  } catch (error) {
+    console.log(error);
+  }
 
   return res.status(200).json({ message: `Comment has been deleted` });
 }

@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+require("dotenv").config();
 const cookieParser = require("cookie-parser");
 const { verifyJWT } = require("./middleware/verifyJWT");
 const PORT = process.env.PORT || 2501;
