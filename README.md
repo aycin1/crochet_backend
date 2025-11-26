@@ -40,6 +40,14 @@ The server is connected to a **PostgreSQL** database that stores users, lists, p
 
 # Improvements
 
+- I intend to implement pagination within the pattern search endpoint for faster loading of data on the frontend received from the third party API via the backend.
+
+- Currently, three custom lists are created upon user registration on the backend. I would like to establish the appropriate endpoints for users to be able to create, edit, and delete their own lists.
+
+- I aim to add privacy features such as making your profile private and having the ability to approve or deny follow requests from other users, as well as the option to make any list public and therefore visible on the users profile.
+
+- Furthermore, I hope to collate informative blogs and tutorials for an educational section for those who would like to learn or advance their skills.
+
 # Acknowledgements
 
 - [Ravelry](https://www.ravelry.com/api)

@@ -1,5 +1,4 @@
 const axios = require("axios");
-const { response } = require("express");
 
 const url = "https://api.ravelry.com/";
 const headers = { "Content-Type": "application/json" };
@@ -32,10 +31,10 @@ async function getSinglePattern(req) {
 async function getPatterns(req) {
   const queries = req.query;
 
-  const keys = Object?.keys(queries)?.map((query) => query);
-  const queryArr = Object?.values(queries)?.map(
-    (query, index) => `${keys[index]}=${query}`
+  const queryArr = Object.entries(queries)?.map(
+    ([key, value]) => `${key}=${value}`
   );
+  queryArr.push("page_size=30");
 
   const options = {
     method: "GET",
