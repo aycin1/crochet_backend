@@ -4,9 +4,9 @@ This is the API for the Fibre Fantasies website.
 
 ### Link
 
-[Frontend source code](https://github.com/aycin1/hooks)
+[Frontend source code](https://github.com/aycin1/fibre-fantasies-frontend)
 
-[Deployed website]()
+<!-- [Deployed website]() -->
 
 ## How it's made
 
