@@ -19,7 +19,10 @@ const corsSettings = {
   ],
   credentials: true,
   methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
-  origin: ["https://fibre-fantasies.vercel.app/", "http://localhost:5173"],
+  origin: [
+    "https://fibre-fantasies-7qzhj1kxo-aycins-projects-b5add123.vercel.app",
+    "http://localhost:5173",
+  ],
 };
 
 app.use(cors(corsSettings));
