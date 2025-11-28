@@ -4,9 +4,11 @@ This is the API for the Fibre Fantasies website.
 
 ### Link
 
-[Frontend source code](https://github.com/aycin1/fibre-fantasies-frontend)
+[Deployed API](https://fibre-fantasies-backend.onrender.com)
 
-<!-- [Deployed website]() -->
+[Deployed website](https://fibre-fantasies.vercel.app/)
+
+[Frontend code](https://github.com/aycin1/fibre-fantasies-frontend)
 
 ## How it's made
 
@@ -20,9 +22,11 @@ The backend also communicates with the [Ravelry API](https://www.ravelry.com/api
 
 The server is connected to a **PostgreSQL** database that stores users, lists, posts, follows, and post interactions. Data is fetched from the database using parameterised queries to prevent SQL injection.
 
+The backend and database have been deployed on **Render** and the frontend is deployed with **Vercel**.
+
 # Usage
 
-# Installation
+<!--  -->
 
 ## Dependencies
 
