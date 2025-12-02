@@ -55,8 +55,8 @@ async function handleListChange(req, res) {
 
   try {
     changeList = await db.query(
-      "UPDATE patterns SET list_id = lists.list_id FROM lists, users WHERE patterns.pattern_id = $1 AND users.username = $2 AND lists.name = $3;",
-      [pattern_id, username, list]
+      "UPDATE patterns p SET list_id = (SELECT list_id FROM lists WHERE name = $1 AND user_id = (SELECT user_id FROM users WHERE username = $2)) WHERE pattern_id = $3 AND user_id = (SELECT user_id FROM users WHERE username = $4); ",
+      [list, username, pattern_id, username]
     );
   } catch (error) {
     console.log(error);
