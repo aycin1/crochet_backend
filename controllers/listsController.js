@@ -35,8 +35,8 @@ async function handlePatternAddition(req, res) {
 
   try {
     addPattern = await db.query(
-      "INSERT INTO patterns (pattern_id, user_id, list_id) SELECT $1, l.user_id, l.list_id FROM lists l JOIN users u ON l.user_id = u.user_id WHERE l.list_id = (SELECT list_id FROM lists l WHERE l.name = $2 AND l.user_id = (SELECT user_id FROM users WHERE username = $3));",
-      [pattern_id, list, username]
+      "INSERT INTO patterns (pattern_id, user_id, list_id) SELECT $1, l.user_id, l.list_id FROM lists l WHERE l.user_id = (SELECT user_id FROM users WHERE username = $2) AND l.list_id = (SELECT list_id FROM lists WHERE l.name = $3);",
+      [pattern_id, username, list]
     );
   } catch (error) {
     console.log(error);
