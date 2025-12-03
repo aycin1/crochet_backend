@@ -41,10 +41,10 @@ async function handlePatternAddition(req, res) {
   } catch (error) {
     console.log(error);
   }
-
-  return await res
-    .status(201)
-    .json({ message: `Pattern has been added to your ${list}` });
+  return await res.json(addPattern);
+  // return await res
+  //   .status(201)
+  //   .json({ message: `Pattern has been added to your ${list}` });
 }
 
 async function handleListChange(req, res) {
