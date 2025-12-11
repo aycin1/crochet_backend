@@ -74,6 +74,7 @@ Most routes of this API require authentication prior to access.
 #### Registration
 
 `POST /register`
+
 Body:
 
 ```json
@@ -85,6 +86,7 @@ The email address and username must be unique.
 #### Login
 
 `POST /login`
+
 Body:
 
 ```json
@@ -99,15 +101,19 @@ Response:
 #### Refresh
 
 `GET /refresh`
+
 Uses the refresh token cookie to generate a new access token
 
 ### Lists
 
 `GET /lists/`
+
 Returns lists and their patterns for the authenticated user.
 
 `POST /lists/`
+
 Adds pattern to a list
+
 Body:
 
 ```json
@@ -115,7 +121,9 @@ Body:
 ```
 
 `PATCH /lists/`
+
 Moves pattern to a different list
+
 Body:
 
 ```json
@@ -123,7 +131,9 @@ Body:
 ```
 
 `DELETE /lists/`
+
 Removes pattern from your lists
+
 Body:
 
 ```json
@@ -133,9 +143,11 @@ Body:
 ### Patterns (via Ravelry API)
 
 `GET /patterns/filter/:id`
+
 Returns information about a specific pattern (price, craft, needle/hook sizes, yardage, gauge, images, category, author, URL for purchase/download, etc.)
 
 `GET /patterns/refine`
+
 // unfinished
 
 ## How It's Made
