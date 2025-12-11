@@ -31,10 +31,8 @@ async function handlePatternAddition(req, res) {
   const { pattern_id, list } = req.body;
   const username = req.user;
 
-  let addPattern;
-
   try {
-    addPattern = await db.query(
+    await db.query(
       "INSERT INTO patterns (pattern_id, user_id, list_id) SELECT $1, l.user_id, l.list_id FROM lists l WHERE l.user_id = (SELECT user_id FROM users WHERE username = $2) AND l.list_id = (SELECT list_id FROM lists WHERE name = $3 AND user_id = (SELECT user_id FROM users WHERE username = $4));",
       [pattern_id, username, list, username]
     );
@@ -51,10 +49,8 @@ async function handleListChange(req, res) {
   const { pattern_id, list } = req.body;
   const username = req.user;
 
-  let changeList;
-
   try {
-    changeList = await db.query(
+    await db.query(
       "UPDATE patterns p SET list_id = (SELECT list_id FROM lists WHERE name = $1 AND user_id = (SELECT user_id FROM users WHERE username = $2)) WHERE pattern_id = $3 AND user_id = (SELECT user_id FROM users WHERE username = $4); ",
       [list, username, pattern_id, username]
     );
