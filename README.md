@@ -110,6 +110,8 @@ Uses the refresh token cookie to generate a new access token
 
 Returns lists and their patterns for the authenticated user.
 
+<br/>
+
 `POST /lists/`
 
 Adds pattern to a list
@@ -120,6 +122,8 @@ Body:
 { "pattern_id": "123456", "list": "wishlist" }
 ```
 
+<br/>
+
 `PATCH /lists/`
 
 Moves pattern to a different list
@@ -129,6 +133,8 @@ Body:
 ```json
 { "pattern_id": "123456", "list": "in-progress" }
 ```
+
+<br/>
 
 `DELETE /lists/`
 
@@ -145,6 +151,8 @@ Body:
 `GET /patterns/filter/:id`
 
 Returns information about a specific pattern (price, craft, needle/hook sizes, yardage, gauge, images, category, author, URL for purchase/download, etc.)
+
+<br/>
 
 `GET /patterns/refine`
 
