@@ -59,7 +59,7 @@ The backend supports the frontend application and handles all data persistence, 
 - Render (backend and database)
 - Vercel (frontend)
 
-## Usage
+<details><summary><h2>Usage</h2></summary>
 
 The backend is fully deployed on Render, so users can interact with the API without installation or configuration. You can test endpoints using Postman, Thunder Client, or any HTTP client.
 
@@ -67,9 +67,11 @@ The backend is fully deployed on Render, so users can interact with the API with
 
 https://fibre-fantasies-backend.onrender.com
 
+Most routes of this API require authentication prior to access.
+
 ### Authentication
 
-Most routes of this API require authentication prior to access.
+Handles user registration, login, and token refreshing.
 
 #### Registration
 
@@ -95,26 +97,26 @@ Body:
 
 Response:
 
-- body: access token
-- cookie: refresh token
+- Body: access token
+- Cookie: refresh token
 
 #### Refresh
 
 `GET /refresh`
 
-Uses the refresh token cookie to generate a new access token
+Uses the refresh token cookie to generate a new access token.
 
 ### Lists
 
-`GET /lists/`
+Handles saving, relocating, and removing patterns from a user's lists.
 
-Returns lists and their patterns for the authenticated user.
+#### `GET /lists/`
 
-<br/>
+Returns all lists and their patterns for the authenticated user.
 
-`POST /lists/`
+#### `POST /lists/`
 
-Adds pattern to a list
+Adds pattern to a list.
 
 Body:
 
@@ -122,11 +124,9 @@ Body:
 { "pattern_id": "123456", "list": "wishlist" }
 ```
 
-<br/>
+#### `PATCH /lists/`
 
-`PATCH /lists/`
-
-Moves pattern to a different list
+Moves pattern to a different list.
 
 Body:
 
@@ -134,11 +134,9 @@ Body:
 { "pattern_id": "123456", "list": "in-progress" }
 ```
 
-<br/>
+#### `DELETE /lists/`
 
-`DELETE /lists/`
-
-Removes pattern from your lists
+Removes pattern from the user's lists.
 
 Body:
 
@@ -146,17 +144,54 @@ Body:
 { "pattern_id": "123456" }
 ```
 
-### Patterns (via Ravelry API)
+### Patterns
 
-`GET /patterns/filter/:id`
+Endpoints for fetching pattern details from the Ravelry API.
 
-Returns information about a specific pattern (price, craft, needle/hook sizes, yardage, gauge, images, category, author, URL for purchase/download, etc.)
+##### `GET /patterns/filter/:id`
 
-<br/>
+Returns information about a specific pattern using the pattern id (price, craft, needle/hook sizes, yardage, images, category, author, URL for purchase/download, etc.).
 
-`GET /patterns/refine`
+##### `GET /patterns/refine`
 
-// unfinished
+By default returns 30 patterns from the Ravelry API.
+
+#### Refining search
+
+For filtering the results, you can utilise the query parameters below. Various query parameters can be concatenated for advanced filtering with `&`.
+
+##### Search using keywords
+
+`GET /patterns/refine?query=bucket%20hat`
+
+Returns patterns with matching keywords.
+
+##### Filter by craft
+
+`GET /patterns/refine?craft=crochet`
+
+- Returns crochet patterns only.
+- Craft options: crochet, knitting, loom knitting, machine knitting.
+
+##### Filter by availability
+
+`GET /patterns/refine?availability=free`
+
+- Returns free patterns only.
+- Availability options: free, purchase online, purchase in print, Ravelry download.
+
+##### Filter by yarn weight
+
+`GET /patterns/refine?weight=worsted`
+
+- Returns patterns that require worsted weight yarn.
+- Yarn weight options: thread, cobweb, lace, light fingering, fingering, sport, DK, worsted, aran, bulky, super bulky, jumbo.
+
+##### Filter by pattern attributes
+
+##### Filter by pattern categories
+
+</details>
 
 ## How It's Made
 
