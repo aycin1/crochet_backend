@@ -23,7 +23,7 @@ The backend supports the frontend application and handles all data persistence, 
 - [Deployed API](https://fibre-fantasies-backend.onrender.com)
   (Note: the Render free tier may take up to a minute to wake the API after inactivity)
 - [Deployed website](https://fibre-fantasies.vercel.app/)
-- [Frontend code](https://github.com/aycin1/fibre-fantasies-frontend)
+- [Frontend repository](https://github.com/aycin1/fibre-fantasies-frontend)
 
 ## Features
 
