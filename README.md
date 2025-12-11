@@ -71,7 +71,7 @@ https://fibre-fantasies-backend.onrender.com
 
 Most routes of this API require authentication prior to access.
 
-### Registration
+#### Registration
 
 `POST /register`
 Body:
@@ -82,7 +82,7 @@ Body:
 
 The email address and username must be unique.
 
-### Login
+#### Login
 
 `POST /login`
 Body:
@@ -96,7 +96,7 @@ Response:
 - body: access token
 - cookie: refresh token
 
-### Refresh
+#### Refresh
 
 `GET /refresh`
 Uses the refresh token cookie to generate a new access token
