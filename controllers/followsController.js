@@ -15,7 +15,7 @@ async function checkIfFollowing(req, res) {
     console.log(error);
   }
 
-  if (userSearch.rows.length) return res.status(200).json(true);
+  if (userSearch?.rows?.length) return res.status(200).json(true);
   return res.status(204).json(false);
 }
 

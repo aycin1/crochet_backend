@@ -19,8 +19,10 @@ async function getLists(req, res) {
     console.log(error);
   }
 
-  const lists = listsQuery.rows.map((list) => {
-    const patterns = patternQuery.rows.filter((row) => row.name === list.name);
+  const lists = listsQuery?.rows?.map((list) => {
+    const patterns = patternQuery?.rows?.filter(
+      (row) => row.name === list.name
+    );
     return { name: list.name, patterns };
   });
 

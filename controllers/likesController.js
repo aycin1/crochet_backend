@@ -13,7 +13,7 @@ async function getLikes(req, res) {
     console.log(error);
   }
 
-  return res.status(200).json(likedUsers.rows);
+  return res.status(200).json(likedUsers?.rows);
 }
 
 async function checkIfLiked(req, res) {
@@ -31,7 +31,7 @@ async function checkIfLiked(req, res) {
     console.log(error);
   }
 
-  if (isLiked.rows.length) return res.status(200).json(true);
+  if (isLiked?.rows?.length) return res.status(200).json(true);
   else return res.status(204).json(false);
 }
 

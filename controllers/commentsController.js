@@ -14,7 +14,7 @@ async function getComments(req, res) {
     console.log(error);
   }
 
-  return res.status(200).json(comments.rows);
+  return res.status(200).json(comments?.rows);
 }
 
 async function addComment(req, res) {
@@ -28,7 +28,7 @@ async function addComment(req, res) {
       "SELECT * FROM comments WHERE post_id = $1 AND comment = $2 AND user_id = (SELECT user_id FROM users WHERE username = $3);",
       [post_id, message, username]
     );
-    if (doesCommentExist.rows.length)
+    if (doesCommentExist?.rows?.length)
       return res
         .status(200)
         .json({ message: "Comment has already been posted" });

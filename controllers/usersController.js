@@ -31,7 +31,7 @@ async function getUserPosts(req, res) {
     console.log(error);
   }
 
-  return res.status(200).json(posts.rows);
+  return res.status(200).json(posts?.rows);
 }
 
 async function handleUserSearch(req, res) {

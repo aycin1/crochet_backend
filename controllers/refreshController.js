@@ -16,7 +16,7 @@ async function handleRefreshToken(req, res) {
     console.log(error);
   }
 
-  if (!thisUser.rows.length)
+  if (!thisUser?.rows?.length)
     return res.status(403).json({ error: "Forbidden" });
 
   jwt.verify(

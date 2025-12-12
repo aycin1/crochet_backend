@@ -22,13 +22,13 @@ async function registerNewUser(req, res) {
     console.log(error);
   }
 
-  if (emailQuery.rows.length) {
+  if (emailQuery?.rows?.length) {
     return res.status(409).json({
       message: "An account with this email address exists, please sign in",
     });
   }
 
-  if (usernameQuery.rows.length) {
+  if (usernameQuery?.rows?.length) {
     return res.status(409).json({
       message: "This username has been taken, please try a different one",
     });
