@@ -1,11 +1,11 @@
-const db = require("../db/index.js");
+const query = require("../db/index.js");
 
 async function getUser(req, res) {
   const username = req.user;
   let thisUser;
 
   try {
-    thisUser = await db.query("SELECT * FROM users WHERE username = $1", [
+    thisUser = await query("SELECT * FROM users WHERE username = $1", [
       username,
     ]);
   } catch (error) {
@@ -23,7 +23,7 @@ async function getUserPosts(req, res) {
   let posts;
 
   try {
-    posts = await db.query(
+    posts = await query(
       "SELECT p.*, u.username FROM posts p INNER JOIN users u ON p.user_id = u.user_id WHERE u.username = $1 ORDER BY p.id DESC;",
       [username]
     );
@@ -40,9 +40,7 @@ async function handleUserSearch(req, res) {
   let user;
 
   try {
-    user = await db.query("SELECT * FROM users WHERE username = $1", [
-      username,
-    ]);
+    user = await query("SELECT * FROM users WHERE username = $1", [username]);
   } catch (error) {
     console.log(error);
   }

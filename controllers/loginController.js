@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const db = require("../db/index.js");
+const query = require("../db/index.js");
 
 async function handleLogin(req, res) {
   const { username, password } = req.body;
@@ -12,7 +12,7 @@ async function handleLogin(req, res) {
 
   let thisUser;
   try {
-    thisUser = await db.query("SELECT * FROM users WHERE username = $1", [
+    thisUser = await query("SELECT * FROM users WHERE username = $1", [
       username,
     ]);
   } catch (error) {
@@ -40,10 +40,10 @@ async function handleLogin(req, res) {
         { expiresIn: "1d" }
       );
 
-      await db.query(
-        "UPDATE users SET refresh_token = $1 WHERE username = $2",
-        [refreshToken, username]
-      );
+      await query("UPDATE users SET refresh_token = $1 WHERE username = $2", [
+        refreshToken,
+        username,
+      ]);
 
       // send tokens to user
       res.cookie("jwt", refreshToken, {

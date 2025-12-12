@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const db = require("../db/index.js");
+const query = require("../db/index.js");
 
 async function handleRefreshToken(req, res) {
   const cookies = req.cookies;
@@ -9,7 +9,7 @@ async function handleRefreshToken(req, res) {
   let thisUser;
 
   try {
-    thisUser = await db.query("SELECT * FROM users WHERE refresh_token = $1;", [
+    thisUser = await query("SELECT * FROM users WHERE refresh_token = $1;", [
       refreshToken,
     ]);
   } catch (error) {

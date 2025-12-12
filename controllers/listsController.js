@@ -1,4 +1,4 @@
-const db = require("../db/index.js");
+const query = require("../db/index.js");
 
 async function getLists(req, res) {
   const username = req.user;
@@ -7,11 +7,11 @@ async function getLists(req, res) {
   let patternQuery;
 
   try {
-    listsQuery = await db.query(
+    listsQuery = await query(
       "SELECT name FROM lists WHERE user_id = (SELECT user_id FROM users WHERE username = $1);",
       [username]
     );
-    patternQuery = await db.query(
+    patternQuery = await query(
       "SELECT p.pattern_id, l.name FROM patterns p JOIN lists l ON p.list_id = l.list_id WHERE l.user_id = (SELECT user_id FROM users WHERE username = $1);",
       [username]
     );
@@ -32,7 +32,7 @@ async function handlePatternAddition(req, res) {
   const username = req.user;
 
   try {
-    await db.query(
+    await query(
       "INSERT INTO patterns (pattern_id, user_id, list_id) SELECT $1, l.user_id, l.list_id FROM lists l WHERE l.user_id = (SELECT user_id FROM users WHERE username = $2) AND l.list_id = (SELECT list_id FROM lists WHERE name = $3 AND user_id = (SELECT user_id FROM users WHERE username = $4));",
       [pattern_id, username, list, username]
     );
@@ -50,7 +50,7 @@ async function handleListChange(req, res) {
   const username = req.user;
 
   try {
-    await db.query(
+    await query(
       "UPDATE patterns p SET list_id = (SELECT list_id FROM lists WHERE name = $1 AND user_id = (SELECT user_id FROM users WHERE username = $2)) WHERE pattern_id = $3 AND user_id = (SELECT user_id FROM users WHERE username = $4); ",
       [list, username, pattern_id, username]
     );
@@ -68,7 +68,7 @@ async function handlePatternDeletion(req, res) {
   const username = req.user;
 
   try {
-    await db.query(
+    await query(
       "DELETE FROM patterns USING users WHERE patterns.user_id = users.user_id AND patterns.pattern_id = $1 AND users.username = $2;",
       [pattern_id, username]
     );

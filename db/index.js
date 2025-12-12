@@ -2,8 +2,13 @@ const pg = require("pg");
 const { Pool } = pg;
 
 const pool = new Pool({
-  connectionString: process.env.EXTERNAL_DATABASE_URL,
+  connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false },
 });
 
-module.exports = pool;
+async function query(text, params) {
+  const res = await pool.query(text, params);
+  return res;
+}
+
+module.exports = query;

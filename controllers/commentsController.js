@@ -1,4 +1,4 @@
-const db = require("../db/index.js");
+const query = require("../db/index.js");
 
 async function getComments(req, res) {
   const { post_id } = req.params;
@@ -6,7 +6,7 @@ async function getComments(req, res) {
   let comments;
 
   try {
-    comments = await db.query(
+    comments = await query(
       "SELECT c.*, u.username FROM comments c JOIN users u ON c.user_id = u.user_id WHERE post_id = $1",
       [post_id]
     );
@@ -24,7 +24,7 @@ async function addComment(req, res) {
   let doesCommentExist;
 
   try {
-    doesCommentExist = await db.query(
+    doesCommentExist = await query(
       "SELECT * FROM comments WHERE post_id = $1 AND comment = $2 AND user_id = (SELECT user_id FROM users WHERE username = $3);",
       [post_id, message, username]
     );
@@ -33,7 +33,7 @@ async function addComment(req, res) {
         .status(200)
         .json({ message: "Comment has already been posted" });
 
-    await db.query(
+    await query(
       "INSERT INTO comments (user_id, comment, time, post_id) VALUES ((SELECT user_id FROM users WHERE username = $1), $2, NOW(), $3);",
       [username, message, post_id]
     );
@@ -49,7 +49,7 @@ async function removeComment(req, res) {
   const username = req.user;
 
   try {
-    await db.query(
+    await query(
       "DELETE FROM comments WHERE post_id = $1 AND comment = $2 AND user_id = (SELECT user_id FROM users WHERE username = $3);",
       [post_id, comment, username]
     );

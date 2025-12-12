@@ -1,5 +1,5 @@
 const bcrypt = require("bcrypt");
-const db = require("../db/index.js");
+const query = require("../db/index.js");
 
 async function registerNewUser(req, res) {
   const { email, username, password } = req.body;
@@ -14,10 +14,8 @@ async function registerNewUser(req, res) {
   let usernameQuery;
 
   try {
-    emailQuery = await db.query("SELECT * FROM users WHERE email = $1", [
-      email,
-    ]);
-    usernameQuery = await db.query("SELECT * FROM users WHERE username = $1", [
+    emailQuery = await query("SELECT * FROM users WHERE email = $1", [email]);
+    usernameQuery = await query("SELECT * FROM users WHERE username = $1", [
       username,
     ]);
   } catch (error) {
@@ -39,20 +37,20 @@ async function registerNewUser(req, res) {
   const hashedPassword = await bcrypt.hash(password, 10);
 
   try {
-    await db.query(
+    await query(
       "INSERT INTO users (username, email, password, refresh_token) VALUES ($1, $2, $3, $4)",
       [username, email, hashedPassword, ""]
     );
 
-    await db.query(
+    await query(
       "INSERT INTO lists (name, user_id) VALUES ('wishlist', (SELECT user_id FROM users WHERE username = $1));",
       [username]
     );
-    await db.query(
+    await query(
       "INSERT INTO lists (name, user_id) VALUES ('in-progress', (SELECT user_id FROM users WHERE username = $1));",
       [username]
     );
-    await db.query(
+    await query(
       "INSERT INTO lists (name, user_id) VALUES ('completed', (SELECT user_id FROM users WHERE username = $1));",
       [username]
     );

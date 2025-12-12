@@ -1,4 +1,4 @@
-const db = require("../db/index.js");
+const query = require("../db/index.js");
 
 async function getLikes(req, res) {
   const { post_id } = req.params;
@@ -6,7 +6,7 @@ async function getLikes(req, res) {
   let likedUsers;
 
   try {
-    likedUsers = await db.query("SELECT * FROM likes WHERE post_id = $1;", [
+    likedUsers = await query("SELECT * FROM likes WHERE post_id = $1;", [
       post_id,
     ]);
   } catch (error) {
@@ -23,7 +23,7 @@ async function checkIfLiked(req, res) {
   let isLiked;
 
   try {
-    isLiked = await db.query(
+    isLiked = await query(
       "SELECT * FROM likes WHERE post_id = $1 AND user_id = (SELECT user_id FROM users WHERE username = $2);",
       [post_id, username]
     );
@@ -42,7 +42,7 @@ async function addLike(req, res) {
   let addLike;
 
   try {
-    addLike = await db.query(
+    addLike = await query(
       "INSERT INTO likes (user_id, post_id) VALUES ((SELECT user_id FROM users WHERE username = $1), $2);",
       [username, post_id]
     );
@@ -58,7 +58,7 @@ async function removeLike(req, res) {
   const username = req.user;
 
   try {
-    await db.query(
+    await query(
       "DELETE FROM likes WHERE post_id = $1 AND user_id = (SELECT user_id FROM users WHERE username = $2);",
       [post_id, username]
     );

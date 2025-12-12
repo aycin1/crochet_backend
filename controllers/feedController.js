@@ -1,4 +1,4 @@
-const db = require("../db/index.js");
+const query = require("../db/index.js");
 
 async function getPosts(req, res) {
   const username = req.user;
@@ -6,7 +6,7 @@ async function getPosts(req, res) {
   let posts;
 
   try {
-    posts = await db.query(
+    posts = await query(
       "SELECT p.*, u.username FROM posts p FULL JOIN followings f ON f.following_id = p.user_id JOIN users u ON u.user_id = p.user_id WHERE p.user_id = (SELECT user_id FROM users WHERE username = $1) OR f.user_id = (SELECT user_id FROM users WHERE username = $1) AND f.following_id = p.user_id ORDER BY p.id DESC;",
       [username]
     );
@@ -22,7 +22,7 @@ async function addPost(req, res) {
   const username = req.user;
 
   try {
-    await db.query(
+    await query(
       "INSERT INTO posts (post_id, pattern_id, user_id, date, caption) SELECT $1, $2, user_id, NOW(), $3 FROM users WHERE users.username=$4;",
       [uuid, pattern_id, caption, username]
     );
@@ -37,7 +37,7 @@ async function editCaption(req, res) {
   const { post_id, caption } = req.body;
 
   try {
-    await db.query("UPDATE posts SET caption = $1 WHERE post_id = $2;", [
+    await query("UPDATE posts SET caption = $1 WHERE post_id = $2;", [
       caption,
       post_id,
     ]);
@@ -54,9 +54,7 @@ async function deletePost(req, res) {
   let thisPost;
 
   try {
-    thisPost = await db.query("DELETE FROM posts WHERE post_id = $1", [
-      post_id,
-    ]);
+    thisPost = await query("DELETE FROM posts WHERE post_id = $1", [post_id]);
   } catch (error) {
     console.log(error);
   }

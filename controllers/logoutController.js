@@ -1,4 +1,4 @@
-const db = require("../db/index.js");
+const query = require("../db/index.js");
 
 async function handleLogout(req, res) {
   const cookies = req.cookies;
@@ -9,7 +9,7 @@ async function handleLogout(req, res) {
   let thisUser;
 
   try {
-    thisUser = await db.query("SELECT * FROM users WHERE refresh_token = $1", [
+    thisUser = await query("SELECT * FROM users WHERE refresh_token = $1", [
       refreshToken,
     ]);
   } catch (error) {
@@ -26,7 +26,7 @@ async function handleLogout(req, res) {
   }
 
   try {
-    await db.query(
+    await query(
       "UPDATE users SET refresh_token = $1 WHERE refresh_token = $2",
       ["", refreshToken]
     );

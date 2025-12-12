@@ -1,4 +1,4 @@
-const db = require("../db/index.js");
+const query = require("../db/index.js");
 
 async function checkIfFollowing(req, res) {
   const { searchedUser } = req.query;
@@ -7,7 +7,7 @@ async function checkIfFollowing(req, res) {
   let userSearch;
 
   try {
-    userSearch = await db.query(
+    userSearch = await query(
       "SELECT * FROM followings WHERE user_id = (SELECT user_id FROM users WHERE username = $1) AND following_id = (SELECT user_id FROM users WHERE username = $2);",
       [currentUser, searchedUser]
     );
@@ -24,7 +24,7 @@ async function handleFollowUser(req, res) {
   const username = req.user;
 
   try {
-    await db.query(
+    await query(
       "INSERT INTO followings (user_id, following_id) VALUES ((SELECT user_id FROM users WHERE username = $1),(SELECT user_id FROM users WHERE username = $2));",
       [username, following_user]
     );
@@ -42,7 +42,7 @@ async function handleUnfollowUser(req, res) {
   const username = req.user;
 
   try {
-    await db.query(
+    await query(
       "DELETE FROM followings WHERE user_id = (SELECT user_id FROM users WHERE username = $1) AND following_id = (SELECT user_id FROM users WHERE username = $2);",
       [username, unfollowing_user]
     );
@@ -62,11 +62,11 @@ async function getFollowCount(req, res) {
   let following;
 
   try {
-    followers = await db.query(
+    followers = await query(
       "SELECT u.username FROM users u JOIN followings f ON u.user_id = f.user_id WHERE f.following_id = (SELECT user_id FROM users WHERE username = $1);",
       [thisUser]
     );
-    following = await db.query(
+    following = await query(
       "SELECT u.username FROM users u JOIN followings f ON u.user_id = f.following_id WHERE f.user_id = (SELECT user_id FROM users WHERE username = $1);",
       [thisUser]
     );
