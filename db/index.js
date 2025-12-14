@@ -4,7 +4,6 @@ const { Pool } = pg;
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false },
-  family: 4,
 });
 
 async function query(text, params) {
