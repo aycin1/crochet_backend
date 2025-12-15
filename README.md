@@ -56,7 +56,8 @@ The backend supports the frontend application and handles all data persistence, 
 
 ### Deployment
 
-- Render (backend and database)
+- Render (backend)
+- Supabase (database)
 - Vercel (frontend)
 
 <details><summary><h2>Usage</h2></summary>
@@ -114,6 +115,49 @@ Handles saving, relocating, and removing patterns from a user's lists.
 
 Returns all lists and their patterns for the authenticated user.
 
+Response example:
+
+```json
+{ ...,
+  "data": [
+    {
+      "name": "wishlist",
+      "patterns": [
+        {
+          "pattern_id": "7471498",
+          "name": "wishlist"
+        },
+        {
+          "pattern_id": "7481615",
+          "name": "wishlist"
+        },
+        {
+          "pattern_id": "7392714",
+          "name": "wishlist"
+        }
+      ]
+    },
+    {
+      "name": "in-progress",
+      "patterns": [
+        {
+          "pattern_id": "1258283",
+          "name": "in-progress"
+        },
+        {
+          "pattern_id": "7371420",
+          "name": "in-progress"
+        }
+      ]
+    },
+    {
+      "name": "completed",
+      "patterns": []
+    }
+  ]
+}
+```
+
 #### `POST /lists/`
 
 Adds pattern to a list.
@@ -170,26 +214,60 @@ Returns patterns with matching keywords.
 
 `GET /patterns/refine?craft=crochet`
 
-- Returns crochet patterns only.
-- Craft options: crochet, knitting, loom knitting, machine knitting.
+- Returns crochet patterns only
+- Craft options: crochet, knitting, loom knitting, machine knitting
 
 ##### Filter by availability
 
 `GET /patterns/refine?availability=free`
 
-- Returns free patterns only.
-- Availability options: free, purchase online, purchase in print, Ravelry download.
+- Returns free patterns only
+- Availability options: free, purchase online, purchase in print, Ravelry download
 
 ##### Filter by yarn weight
 
 `GET /patterns/refine?weight=worsted`
 
-- Returns patterns that require worsted weight yarn.
-- Yarn weight options: thread, cobweb, lace, light fingering, fingering, sport, DK, worsted, aran, bulky, super bulky, jumbo.
+- Returns patterns that require worsted weight yarn
+- Yarn weight options: thread, cobweb, lace, light fingering, fingering, sport, DK, worsted, aran, bulky, super bulky, jumbo
+
+##### Filter by pattern categories
+
+`GET /patterns/refine?pc=dress`
+
+- Returns patterns for dresses only
+- Category options can be viewed [here](https://api.ravelry.com/pattern_categories/list.json) (I recommend using a JSON viewer for better readability)
+- The permalink value of the desired category can be used to filter the search
 
 ##### Filter by pattern attributes
 
-##### Filter by pattern categories
+`GET /patterns/refine?pa=309`
+
+- Returns patterns with corrugated ribbing only
+- Attribute groups can be viewed [here](https://api.ravelry.com/pattern_attributes/groups.json) (I recommend using a JSON viewer for better readability)
+- The id value of the desired attribute can be used to filter the search
+
+#### Example search and response
+
+`GET /patterns/refine?pc=throw&craft=crochet&availability=free&weight=dk&pa=186%2B242`
+
+- Will look for throw patterns that are crochet, free, using DK weighted yarn, rectangle-shaped (242) and mosaic (186)
+- If you wanted to broaden your options, you can replace `%2B` with `%7C` for patterns that are either rectangle-shaped OR mosaic
+
+Response:
+
+```json
+{
+  "patternIDs": [
+    7484478, 7471498, 7487426, 7487109, 7392714, 1341831, 1258283, 1255578,
+    271504, 7487281, 1204116, 7486787, 990044, 857493, 7487107, 7486861,
+    7485511, 980701, 1070649, 754478, 7487278, 7487267, 7304956, 1296810,
+    7455631, 7487178, 1285522, 1246632, 1279445, 7487499
+  ]
+}
+```
+
+The backend normalises third-party API data and exposes only pattern IDs. Detailed pattern data is fetched separately to reduce payload size and coupling.
 
 </details>
 
@@ -207,7 +285,9 @@ The backend is built with **Node** and **Express**, following a RESTful architec
 
 ### Deployment
 
-The backend and database are deployed on **Render** and the frontend is deployed on **Vercel**.
+- The backend is deployed on **Render**
+- The database is deployed on **Supabase**
+- The frontend is deployed on **Vercel**
 
 ## Dependencies
 

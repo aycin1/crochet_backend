@@ -20,7 +20,7 @@ router.get("/filter/:id", async function (req, res) {
 router.get("/refine", async function (req, res) {
   try {
     const response = await getPatterns(req);
-    res.send(response?.data?.patterns);
+    res.send({ patternIDs: response });
   } catch (error) {
     console.log(error);
     res.send({ error });

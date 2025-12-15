@@ -44,7 +44,9 @@ async function getPatterns(req) {
       ? `${url}/patterns/search.json?${queryArr.join("&")}`
       : `${url}/patterns/search.json`,
   };
-  return await axiosCall(options);
+  const response = await axiosCall(options);
+  const idArr = response?.data?.patterns.map((pattern) => pattern.id);
+  return idArr;
 }
 
 async function getPatternCategories() {
