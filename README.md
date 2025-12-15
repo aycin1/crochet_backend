@@ -118,7 +118,7 @@ Returns all lists and their patterns for the authenticated user.
 Response example:
 
 ```json
-{ ...,
+{ 
   "data": [
     {
       "name": "wishlist",
