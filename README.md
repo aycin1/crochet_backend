@@ -122,33 +122,11 @@ Response example:
   "data": [
     {
       "name": "wishlist",
-      "patterns": [
-        {
-          "pattern_id": "7471498",
-          "name": "wishlist"
-        },
-        {
-          "pattern_id": "7481615",
-          "name": "wishlist"
-        },
-        {
-          "pattern_id": "7392714",
-          "name": "wishlist"
-        }
-      ]
+      "patterns": [{"pattern_id": "7471498", "name": "wishlist"}, {"pattern_id": "7481615", "name": "wishlist"}, {"pattern_id": "7392714", "name": "wishlist"}]
     },
     {
       "name": "in-progress",
-      "patterns": [
-        {
-          "pattern_id": "1258283",
-          "name": "in-progress"
-        },
-        {
-          "pattern_id": "7371420",
-          "name": "in-progress"
-        }
-      ]
+      "patterns": [{"pattern_id": "1258283", "name": "in-progress"}, {"pattern_id": "7371420", "name": "in-progress"}]
     },
     {
       "name": "completed",
