@@ -60,7 +60,9 @@ The backend supports the frontend application and handles all data persistence, 
 - Supabase (database)
 - Vercel (frontend)
 
-<details><summary><h2>Usage</h2></summary>
+--------
+
+<details open><summary><h2>Usage</h2></summary>
 
 The backend is fully deployed on Render, so users can interact with the API without installation or configuration. You can test endpoints using Postman, Thunder Client, or any HTTP client.
 
@@ -285,7 +287,6 @@ The backend is built with **Node** and **Express**, following a RESTful architec
 ### Performance & UX
 
 - Pagination for pattern search
-- Lazy loading of images
 
 ### Enhancements
 
