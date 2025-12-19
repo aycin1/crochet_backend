@@ -195,14 +195,14 @@ Returns patterns with matching keywords.
 `GET /patterns/refine?craft=crochet`
 
 - Returns crochet patterns only
-- Craft options: crochet, knitting, loom knitting, machine knitting
+- Craft options: crochet, knitting, loom knitting (`=loom-knitting`), machine knitting (`=machine-knitting`)
 
 ##### Filter by availability
 
 `GET /patterns/refine?availability=free`
 
 - Returns free patterns only
-- Availability options: free, purchase online, purchase in print, Ravelry download
+- Availability options: free, purchase online (`=online`), purchase in print (`=inprint`), Ravelry download (`=ravelry`)
 
 ##### Filter by yarn weight
 
